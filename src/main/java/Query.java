@@ -32,7 +32,7 @@ public class Query {
 
             FileUtility.createFlyMigrationScript(listOfTheJoins,dependenciesMap,selectTerms,baseTable,whereCaluse);
 
-            System.out.println(selectTerms.size());
+            //System.out.println(selectTerms.size());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -165,11 +165,11 @@ public class Query {
                     listOfTheJoins.add(newEntry);
                     dependenciesMap.put(alias, newEntry);
 
-                    System.out.println(joinType + " , " + condition + " , " + table + " , " + alias);
+                    //System.out.println(joinType + " , " + condition + " , " + table + " , " + alias);
                 }else{
                     //where clause
                     whereCaluse.add(joinValues[i]);
-                    System.out.println(joinValues[i]);
+                    //System.out.println(joinValues[i]);
                 }
             }
         }

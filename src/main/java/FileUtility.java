@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,26 +11,72 @@ public class FileUtility {
     public static void createFlyMigrationScript(ArrayList<JoinModel> joinModelArrayList, Map<String, JoinModel> dependenciesMap, Map<String, String> selectMap, String baseTable, ArrayList<String> whereCaluse){
 
        Map<String,String> selectDependencies = new HashMap<>();
-
-       String report           = insertIntoCustomReport(baseTable,whereCaluse);
+       ArrayList<String> paramsList = new ArrayList<>();
+        
+       String report           = insertIntoCustomReport(baseTable,whereCaluse,"REPORT_NAME",paramsList);
        String selects          = insertIntoCustomColumnDefinition(selectMap,baseTable);
        String joins            = insertIntoCustomJoinDefinition(joinModelArrayList);
        String baseJoin         = insertIntoCustomReportJoinBaseTable(baseTable);
        String dependenciesJoin = insertIntoCustomColumnJoinDefinitionSelects(joinModelArrayList,dependenciesMap,selectMap,selectDependencies,baseTable);
+       String customFilters    = insertIntoCustomFilterDefinitions(paramsList);
 
-       System.out.println( report + selects + joins + baseJoin + dependenciesJoin );
+
+       System.out.println( report + selects + joins + baseJoin + dependenciesJoin + customFilters);
     }
 
-    private static String insertIntoCustomReport(String baseTable, ArrayList<String> whereCaluse) {
+    private static String insertIntoCustomFilterDefinitions(ArrayList<String> paramsList) {
+
+        String customFilterBegin = "\nINSERT INTO custom_filter_definitions (id, name, custom_report_definition_id, filter, params) \nVALUES\n";
+        String line = "";
+
+        for(int i =0; i < paramsList.size(); i++){
+
+            line += "(id, name, @report_number,"+ paramsList.get(i) + ", param),\n";
+
+        }
+        line = line.substring(0,line.length()-2);
+
+        return customFilterBegin + line.toLowerCase() +";";
+
+
+    }
+
+    private static String insertIntoCustomReport(String baseTable, ArrayList<String> whereCaluse, String reportName, ArrayList<String> paramsList) {
+
+        String reportNumberPlaceholder = "SELECT @report_number := id from custom_report_definitions where name = '" + reportName + "';\n";
 
         String s = whereCaluse.stream().map(Object::toString).collect(Collectors.joining("','"));
         String noWhere = s.replaceAll("WHERE","").trim();
         String noGroupBy = noWhere.replaceAll("GROUP BY.*\\w","").trim();
 
-        String beginning = "\nINSERT INTO custom_report_definitions (id, name, `database`, base_table, filter) \nVALUES (" +
-                "@report_number, 'report_name', 'appdirect', '"+ baseTable +"','"+ noGroupBy +"');\n";
+        String[] whereConditions = noGroupBy.split("AND");
+        String filter = "";
 
-        return beginning;
+        for(int i =0; i<whereConditions.length; i++){
+            if(!whereConditions[i].contains(":")){
+                filter += whereConditions[i].trim() + " AND ";
+            }else{
+                paramsList.add(whereConditions[i].trim());
+            }
+        }
+
+        if(!filter.isEmpty()){
+            filter = filter.substring(0,filter.length()-5);
+        }
+
+        String insertReport =
+                "\nSELECT @report_number := id from custom_report_definitions where name = '"+ reportName + "';\n" +
+                "\nINSERT INTO custom_report_definitions (`id`, `name`, `database`, `base_table`, `filter`) \n" +
+                "SELECT * FROM ((SELECT ((select max(id) from custom_report_definitions)+1),'" + reportName + "','appdirect','" + baseTable.toLowerCase() + "','" + filter + "')) AS tmp\n" +
+                "WHERE not exists(\n" +
+                "   (Select * from custom_report_definitions where id =  @report_number)\n" +
+                ");\n" +
+                "\nSELECT @report_number := id from custom_report_definitions where name = '"+ reportName + "';\n";
+
+        String beginning = "\nINSERT INTO custom_report_definitions (id, name, `database`, base_table, filter) \nVALUES (" +
+                "@report_number, 'report_name', 'appdirect', '"+ baseTable.toLowerCase() +"','"+ noGroupBy.toLowerCase() +"');\n";
+
+        return insertReport;
 
     }
 
@@ -78,12 +125,12 @@ public class FileUtility {
             k = "";
             for(int i =0; i<appendReportNumber.length; i++) {
                 if (!appendReportNumber[i].isEmpty()) {
-                    k += "(select concat(@report_number, '_' ," + appendReportNumber[i] + ")),";
+                    k += "(select concat(@report_number, '_' ," + appendReportNumber[i].toLowerCase() + ")),";
                 }
 
                 if (i == (appendReportNumber.length - 1)) {
                     if (!k.contains("'"+entry.getKey()+"'") && !entry.getKey().equals(baseTable)) {
-                        k = k + "(select concat(@report_number, '_' ,'" + entry.getKey() + "')),";
+                        k = k + "(select concat(@report_number, '_' ,'" + entry.getKey().toLowerCase() + "')),";
                     }
                 }
             }
@@ -93,8 +140,8 @@ public class FileUtility {
             k = k.substring(0,k.length()-1);
 
                 beginning += "\nINSERT INTO custom_column_join_definitions \n(\nselect\n  ccd.id, cjd.id\nfrom\n  custom_join_definitions cjd, custom_column_definitions ccd\nwhere\n  ccd.custom_report_definition_id = @report_number\n  " +
-                        "and ccd.name in (" + v + ") " +
-                        "\n  and cjd.alias in (" + k + ")\n);\n";
+                        "and ccd.name in (" + v.toLowerCase() + ") " +
+                        "\n  and cjd.alias in (" + k.toLowerCase() + ")\n);\n";
             }
         }
 
@@ -104,7 +151,7 @@ public class FileUtility {
     private static String insertIntoCustomReportJoinBaseTable(String baseTable) {
 
         //replace report number with parameter
-        return "\nINSERT INTO custom_report_join_definitions \n(\n select @report_number, id\n from custom_join_definitions\n where alias in  ('" + baseTable + "')\n);\n";
+        return "\nINSERT INTO custom_report_join_definitions \n(\n select @report_number, id\n from custom_join_definitions\n where alias in  ('" + baseTable.toLowerCase() + "')\n);\n";
 
     }
 
@@ -118,10 +165,10 @@ public class FileUtility {
         for( JoinModel entry : joinModelArrayList) {
 
             if( i == (joinModelArrayList.size() -1)) {
-                content += "\n( '" + entry.getJoinType() + "', (" +"select concat(@report_number, '_' ,'"  + entry.getAlias() + "')), '" + entry.getTable() + "', '" + entry.getJoinClause().trim() + "', NULL);";
+                content += "\n( '" + entry.getJoinType() + "', (" +"select concat(@report_number, '_' ,'"  + entry.getAlias().toLowerCase() + "')), '" + entry.getTable().toLowerCase() + "', '" + entry.getJoinClause().trim().toLowerCase() + "', NULL);";
             }else{
                 ++i;
-                content += "\n( '" + entry.getJoinType() + "', (" +"select concat(@report_number, '_' ,'"  + entry.getAlias() + "')), '" + entry.getTable() + "', '" + entry.getJoinClause().trim() + "', NULL),";
+                content += "\n( '" + entry.getJoinType() + "', (" +"select concat(@report_number, '_' ,'"  + entry.getAlias().toLowerCase() + "')), '" + entry.getTable().toLowerCase() + "', '" + entry.getJoinClause().trim().toLowerCase() + "', NULL),";
             }
         }
         content = beginning + content + "\n";
@@ -139,7 +186,7 @@ public class FileUtility {
         for( Map.Entry< String,String> entry : selectList.entrySet()) {
 
             if(!entry.getKey().equals(baseTable)) {
-                    content += "\n( '" + entry.getKey().trim().replaceAll("\\s", "_") + "' , " + "@report_number" + " , '" + entry.getValue() + "' , '" + "GROUP_NAME" + "' , '" + entry.getKey().trim() + "' , " + ++i + ", NULL, NULL" + ", 'STRING'),";
+                    content += "\n( '" + entry.getKey().trim().replaceAll("\\s", "_").toLowerCase() + "' , " + "@report_number" + " , '" + entry.getValue().toLowerCase() + "' , '" + "GROUP_NAME" + "' , '" + entry.getKey().trim().toLowerCase() + "' , " + ++i + ", NULL, NULL" + ", 'STRING'),";
             }
         }
         content = content.substring(0,content.length()-1)+";";
