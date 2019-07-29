@@ -112,11 +112,11 @@ public class FileUtility {
 
             String k = "";
             if(dependenciesMap.containsKey(entry.getKey())){
-               String dep = dependenciesMap.get(entry.getKey()).getJoinDependencies().stream().map(Object::toString).collect(Collectors.joining("','"));
+               String dep = dependenciesMap.get(entry.getKey()).getJoinDependencies().stream().map(Object::toString).collect(Collectors.joining(","));
                 if(dep.isEmpty()){
-                    k = "'" + entry.getKey() +"'";
+                    k = entry.getKey();
                 }else{
-                    k = "'"+ dep +"'";
+                    k = dep;
                 }
             }
 
@@ -125,12 +125,12 @@ public class FileUtility {
             k = "";
             for(int i =0; i<appendReportNumber.length; i++) {
                 if (!appendReportNumber[i].isEmpty()) {
-                    k += "(select concat(@report_number, '_' ," + appendReportNumber[i].toLowerCase() + ")),";
+                    k += "'" + appendReportNumber[i] + "',";
                 }
 
                 if (i == (appendReportNumber.length - 1)) {
                     if (!k.contains("'"+entry.getKey()+"'") && !entry.getKey().equals(baseTable)) {
-                        k = k + "(select concat(@report_number, '_' ,'" + entry.getKey().toLowerCase() + "')),";
+                        k = k + "'" + entry.getKey().toLowerCase() + "',";
                     }
                 }
             }
@@ -165,10 +165,10 @@ public class FileUtility {
         for( JoinModel entry : joinModelArrayList) {
 
             if( i == (joinModelArrayList.size() -1)) {
-                content += "\n( '" + entry.getJoinType() + "', (" +"select concat(@report_number, '_' ,'"  + entry.getAlias().toLowerCase() + "')), '" + entry.getTable().toLowerCase() + "', '" + entry.getJoinClause().trim().toLowerCase() + "', NULL);";
+                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + entry.getTable().toLowerCase() + "', '" + entry.getJoinClause().trim().toLowerCase() + "', NULL);";
             }else{
                 ++i;
-                content += "\n( '" + entry.getJoinType() + "', (" +"select concat(@report_number, '_' ,'"  + entry.getAlias().toLowerCase() + "')), '" + entry.getTable().toLowerCase() + "', '" + entry.getJoinClause().trim().toLowerCase() + "', NULL),";
+                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + entry.getTable().toLowerCase() + "', '" + entry.getJoinClause().trim().toLowerCase() + "', NULL),";
             }
         }
         content = beginning + content + "\n";
