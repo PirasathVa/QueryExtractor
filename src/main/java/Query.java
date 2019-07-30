@@ -202,7 +202,7 @@ public class Query {
         String getSelectText    = getFileContent(path, selectPattern);
 
         String replaceCharacter = getSelectText.replace("`", "\"");
-        String newLineSelect    = replaceCharacter.toString().replace("SELECT\n","");
+        String newLineSelect    = replaceCharacter.replaceAll("^SELECT.*\n","");
         String removeNewLine    = newLineSelect.replace("\n"," ");
         String removeSpace      = removeNewLine.replaceAll("\\s\\s+", " ");
         String parseableSelect  = removeSpace.replaceAll("\\\",","\",\n");

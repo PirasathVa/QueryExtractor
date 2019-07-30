@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f369cd70-d1bb-4c98-9f14-0b56c40f5d4e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/FileUtility.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/FileUtility.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Query.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/FileUtility.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FileUtility.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -20,8 +23,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Query.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1154">
-              <caret line="36" selection-start-line="36" selection-end-line="36" />
+            <state relative-caret-position="218">
+              <caret line="36" column="24" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -29,8 +32,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/FileUtility.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="422">
-              <caret line="49" column="59" selection-start-line="49" selection-start-column="59" selection-end-line="49" selection-end-column="59" />
+            <state relative-caret-position="465">
+              <caret line="184" selection-start-line="184" selection-end-line="184" />
+              <folding>
+                <element signature="e#5465#5473#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -40,6 +46,10 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>getParameterValues</find>
+      <find>u.partner</find>
+      <find>plan_name</find>
+      <find>v</find>
+      <find>selectDependencies</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -164,16 +174,15 @@
       <option name="presentableId" value="Default" />
       <updated>1564409222098</updated>
       <workItem from="1564409224105" duration="11648000" />
-      <workItem from="1564429285639" duration="12020000" />
+      <workItem from="1564429285639" duration="27223000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23668000" />
+    <option name="totallyTimeSpent" value="38871000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1914" y="23" width="1883" height="1177" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24008691" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -184,8 +193,8 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.4921659" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.46175116" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.4921659" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.35207373" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -210,24 +219,53 @@
     <option name="version" value="1" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/FileUtility.java</url>
+          <line>184</line>
+          <properties />
+          <option name="timeStamp" value="52" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/FileUtility.java</url>
+          <line>177</line>
+          <properties />
+          <option name="timeStamp" value="55" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
-        <watch expression="appendReportNumber" language="JAVA" />
+        <watch expression="v" />
+        <watch expression="dependencies" language="JAVA" />
+        <watch expression="selectDependencies" />
+        <watch expression="values" />
       </configuration>
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/main/java/Query.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1154">
-          <caret line="36" selection-start-line="36" selection-end-line="36" />
+        <state relative-caret-position="218">
+          <caret line="36" column="24" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/src.zip!/java/util/function/Function.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="48" column="6" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/FileUtility.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="49" column="59" selection-start-line="49" selection-start-column="59" selection-end-line="49" selection-end-column="59" />
+        <state relative-caret-position="465">
+          <caret line="184" selection-start-line="184" selection-end-line="184" />
+          <folding>
+            <element signature="e#5465#5473#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
