@@ -8,16 +8,16 @@ import java.util.stream.Collectors;
 
 public class FileUtility {
 
-    public static void createFlyMigrationScript(ArrayList<JoinModel> joinModelArrayList, Map<String, JoinModel> dependenciesMap, Map<String, String> selectMap, String baseTable, ArrayList<String> whereCaluse){
+    public static void createFlyMigrationScript(ArrayList<JoinModel> joinModelArrayList, Map<String, JoinModel> dependenciesMap, Map<String, String> selectMap, String baseAlias, ArrayList<String> whereCaluse, String baseTable){
 
        Map<String,String> selectDependencies = new HashMap<>();
        ArrayList<String> paramsList = new ArrayList<>();
         
-       String report           = insertIntoCustomReport(baseTable,whereCaluse,"REPORT_NAME",paramsList);
-       String selects          = insertIntoCustomColumnDefinition(selectMap,baseTable);
+       String report           = insertIntoCustomReport(baseAlias,whereCaluse,"custom-channel-unused-customer-purchase",paramsList,baseTable);
+       String selects          = insertIntoCustomColumnDefinition(selectMap,baseAlias);
        String joins            = insertIntoCustomJoinDefinition(joinModelArrayList);
-       String baseJoin         = insertIntoCustomReportJoinBaseTable(baseTable);
-       String dependenciesJoin = insertIntoCustomColumnJoinDefinitionSelects(joinModelArrayList,dependenciesMap,selectMap,selectDependencies,baseTable);
+       String baseJoin         = insertIntoCustomReportJoinBaseTable(baseAlias);
+       String dependenciesJoin = insertIntoCustomColumnJoinDefinitionSelects(joinModelArrayList,dependenciesMap,selectMap,selectDependencies,baseAlias);
        String customFilters    = insertIntoCustomFilterDefinitions(paramsList);
 
 
@@ -41,7 +41,7 @@ public class FileUtility {
 
     }
 
-    private static String insertIntoCustomReport(String baseTable, ArrayList<String> whereCaluse, String reportName, ArrayList<String> paramsList) {
+    private static String insertIntoCustomReport(String baseAlias, ArrayList<String> whereCaluse, String reportName, ArrayList<String> paramsList, String baseTable) {
 
         String reportNumberPlaceholder = "SELECT @report_number := id from custom_report_definitions where name = '" + reportName + "';\n";
 
@@ -74,7 +74,7 @@ public class FileUtility {
                 "\nSELECT @report_number := id from custom_report_definitions where name = '"+ reportName + "';\n";
 
         String beginning = "\nINSERT INTO custom_report_definitions (id, name, `database`, base_table, filter) \nVALUES (" +
-                "@report_number, 'report_name', 'appdirect', '"+ baseTable.toLowerCase() +"','"+ noGroupBy.toLowerCase() +"');\n";
+                "@report_number, 'report_name', 'appdirect', '"+ baseAlias.toLowerCase() +"','"+ noGroupBy.toLowerCase() +"');\n";
 
         return insertReport;
 
@@ -185,8 +185,10 @@ public class FileUtility {
         String content = "";
         for( Map.Entry< String,String> entry : selectList.entrySet()) {
 
+            String doubleQuoteWords = entry.getValue().toLowerCase().replaceAll("((?!'\\s*')'[a-zA-Z\\s_-]*')","'$1'");
+
             if(!entry.getKey().equals(baseTable)) {
-                    content += "\n( '" + entry.getKey().trim().replaceAll("\\s", "_").toLowerCase() + "' , " + "@report_number" + " , '" + entry.getValue().toLowerCase() + "' , '" + "GROUP_NAME" + "' , '" + entry.getKey().trim().toLowerCase() + "' , " + ++i + ", NULL, NULL" + ", 'STRING'),";
+                    content += "\n( '" + entry.getKey().trim().replaceAll("\\s", "_").toLowerCase() + "' , " + "@report_number" + " , '" + doubleQuoteWords + "' , '" + "GROUP_NAME" + "' , '" + entry.getKey().trim().toLowerCase() + "' , " + ++i + ", NULL, NULL" + ", 'STRING'),";
             }
         }
         content = content.substring(0,content.length()-1)+";";

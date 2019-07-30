@@ -9,6 +9,8 @@ public class Query {
 
     public static void main(String[] args){
 
+        String[] base                       = new String[2];
+        String baseAlias                    = "";
         String baseTable                    = "";
 
         //Select
@@ -26,11 +28,13 @@ public class Query {
 
         try {
 
-            baseTable = getSelectValues(path,selectTerms);
+            base = getSelectValues(path,selectTerms,base);
+            baseAlias = base[1];
+            baseTable = base[0];
             evaluateAllJoins(path,listOfTheJoins,whereCaluse,dependenciesMap);
-            evaluateAllDependencies(listOfTheJoins,baseTable,dependenciesMap);
+            evaluateAllDependencies(listOfTheJoins,baseAlias,dependenciesMap);
 
-            FileUtility.createFlyMigrationScript(listOfTheJoins,dependenciesMap,selectTerms,baseTable,whereCaluse);
+            FileUtility.createFlyMigrationScript(listOfTheJoins,dependenciesMap,selectTerms,baseAlias,whereCaluse,baseTable);
 
             //System.out.println(selectTerms.size());
 
@@ -191,7 +195,7 @@ public class Query {
         return getJoinText;
     }
 
-    private static String getSelectValues(String path, Map<String, String> selectTerms) throws IOException {
+    private static String[] getSelectValues(String path, Map<String, String> selectTerms, String[] base) throws IOException {
 
         Pattern selectPattern   = Pattern.compile("SELECT(.*(\\n))*FROM(\\s)(.*)");
 
@@ -243,6 +247,6 @@ public class Query {
                 }
             }
         }
-    return baseTableAlias[1];
+    return baseTableAlias;
     }
 }
