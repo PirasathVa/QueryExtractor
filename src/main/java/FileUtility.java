@@ -2,6 +2,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -28,17 +29,18 @@ public class FileUtility {
 
         String customFilterBegin = "\nINSERT INTO custom_filter_definitions (id, name, custom_report_definition_id, filter, params) \nVALUES\n";
         String line = "";
+        String params = "";
 
         for(int i =0; i < paramsList.size(); i++){
 
-            line += "(id, name, @report_number,"+ paramsList.get(i) + ", param),\n";
+            params = getParameterValues(params, paramsList.get(i));
+            line += "(id,"+ params +", @report_number,'"+ paramsList.get(i) + "', " + params + "),\n";
+            params = "";
 
         }
         line = line.substring(0,line.length()-2);
 
         return customFilterBegin + line.toLowerCase() +";";
-
-
     }
 
     private static String insertIntoCustomReport(String baseAlias, ArrayList<String> whereCaluse, String reportName, ArrayList<String> paramsList, String baseTable) {
@@ -160,19 +162,45 @@ public class FileUtility {
         String beginning = "\nINSERT INTO custom_join_definitions (join_type, alias, `table`, clause, params)\n" +
                 "VALUES" ;
 
+        String params = "";
+
         int i = 0;
         String content = "";
         for( JoinModel entry : joinModelArrayList) {
 
             if( i == (joinModelArrayList.size() -1)) {
-                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + entry.getTable().toLowerCase() + "', '" + entry.getJoinClause().trim().toLowerCase() + "', NULL);";
+
+                params = getParameterValues(params, entry.getJoinClause().trim().toLowerCase());
+                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + entry.getTable().toLowerCase() + "', '" + entry.getJoinClause().trim().toLowerCase() + "', " + params + ");";
+                params = "";
             }else{
+                params = getParameterValues(params, entry.getJoinClause().trim().toLowerCase());
                 ++i;
-                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + entry.getTable().toLowerCase() + "', '" + entry.getJoinClause().trim().toLowerCase() + "', NULL),";
+                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + entry.getTable().toLowerCase() + "', '" + entry.getJoinClause().trim().toLowerCase() + "', " + params + "),";
+                params = "";
             }
         }
         content = beginning + content + "\n";
         return content;
+    }
+
+    private static String getParameterValues(String params, String entry) {
+        Pattern pattern = Pattern.compile(":(\\w+)");
+        Matcher matcher = pattern.matcher(entry);
+
+        while (matcher.find()) {
+            String value = matcher.group().toString();
+            if(!value.isEmpty()) {
+                params += value.substring(1) + ",";
+            }
+        }
+
+        if(params.isEmpty()){
+            params = "NULL";
+        }else{
+            params = "'" + params.substring(0,params.length()-1) + "'";
+        }
+        return params;
     }
 
 
@@ -183,21 +211,21 @@ public class FileUtility {
 
         int i = 0;
         String content = "";
+        String params = "";
         for( Map.Entry< String,String> entry : selectList.entrySet()) {
 
             String doubleQuoteWords = entry.getValue().toLowerCase().replaceAll("((?!'\\s*')'[a-zA-Z\\s_-]*')","'$1'");
 
+            params = getParameterValues(params, entry.getKey().trim().toLowerCase());
+
             if(!entry.getKey().equals(baseTable)) {
-                    content += "\n( '" + entry.getKey().trim().replaceAll("\\s", "_").toLowerCase() + "' , " + "@report_number" + " , '" + doubleQuoteWords + "' , '" + "GROUP_NAME" + "' , '" + entry.getKey().trim().toLowerCase() + "' , " + ++i + ", NULL, NULL" + ", 'STRING'),";
+                    content += "\n( '" + entry.getKey().trim().replaceAll("\\s", "_").toLowerCase() + "' , " + "@report_number" + " , '" + doubleQuoteWords + "' , '" + "GROUP_NAME" + "' , '" + entry.getKey().trim().toLowerCase() + "' , " + ++i + ", NULL, " + params +  ", 'STRING'),";
             }
+            params = "";
         }
         content = content.substring(0,content.length()-1)+";";
         content = beginning + content + "\n";
         return content;
     }
-    
-    
-    
-    
-    
+
 }
