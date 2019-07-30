@@ -20,9 +20,16 @@ public class FileUtility {
        String baseJoin         = insertIntoCustomReportJoinBaseTable(baseAlias);
        String dependenciesJoin = insertIntoCustomColumnJoinDefinitionSelects(joinModelArrayList,dependenciesMap,selectMap,selectDependencies,baseAlias);
        String customFilters    = insertIntoCustomFilterDefinitions(paramsList);
+       String access           = insertAccess();
 
+       System.out.println( report + selects + joins + baseJoin + dependenciesJoin + customFilters + access);
+    }
 
-       System.out.println( report + selects + joins + baseJoin + dependenciesJoin + customFilters);
+    private static String insertAccess() {
+
+        String access = "\nINSERT INTO access (uuid, report_uuid, owner_type, owner_partner, custom_report_definition_id) " +
+                        "\nVALUES (UUID(), NULL, 'ROLE_CHANNEL_ADMIN', 'APPDIRECT',@report_number);\n";
+        return access;
     }
 
     private static String insertIntoCustomFilterDefinitions(ArrayList<String> paramsList) {
@@ -40,7 +47,7 @@ public class FileUtility {
         }
         line = line.substring(0,line.length()-2);
 
-        return customFilterBegin + line.toLowerCase() +";";
+        return customFilterBegin + line.toLowerCase() +";\n";
     }
 
     private static String insertIntoCustomReport(String baseAlias, ArrayList<String> whereCaluse, String reportName, ArrayList<String> paramsList, String baseTable) {
