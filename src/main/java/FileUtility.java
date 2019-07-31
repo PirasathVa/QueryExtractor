@@ -1,8 +1,5 @@
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -162,7 +159,6 @@ public class FileUtility {
                 }
 
                 String[] appendReportNumber = k.split(",");
-Map dep = new HashMap();
                 k = "";
                 for (int i = 0; i < appendReportNumber.length; i++) {
                     if (!appendReportNumber[i].isEmpty()) {
@@ -175,7 +171,9 @@ Map dep = new HashMap();
                                     Stream.of(entry.getKey().split(","))
                                     .map(s -> "'" + s + "'")
                                     .collect(Collectors.joining(","));
-                            k = k + test.toLowerCase()+"'";
+                            k = k + test.toLowerCase();
+
+                            k = removeDuplicateDep(k);
 
                         }
                     }
@@ -193,6 +191,22 @@ Map dep = new HashMap();
         }
 
         return beginning;
+    }
+
+    private static String removeDuplicateDep(String duplicates) {
+
+
+        String[] findUnique = duplicates.toLowerCase().split(",");
+        Map<String,String> findUniqueMap = new HashMap<>();
+
+        for(String val : findUnique) {
+            findUniqueMap.put(val,"");
+        }
+
+        List<String> l = new ArrayList<String>(findUniqueMap.keySet());
+        String removedDuplicates = l.stream().map(Object::toString).collect(Collectors.joining(","));
+
+        return removedDuplicates;
     }
 
     private static String insertIntoCustomReportJoinBaseTable(String baseTable) {

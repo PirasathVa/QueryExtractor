@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f369cd70-d1bb-4c98-9f14-0b56c40f5d4e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/FileUtility.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/FileUtility.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Query.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/FileUtility.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FileUtility.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -32,10 +29,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/FileUtility.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="184" selection-start-line="184" selection-end-line="184" />
+            <state relative-caret-position="264">
+              <caret line="173" column="54" selection-start-line="173" selection-start-column="54" selection-end-line="173" selection-end-column="54" />
               <folding>
                 <element signature="e#5465#5473#0" expanded="true" />
+                <element signature="e#9111#9119#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -174,15 +172,16 @@
       <option name="presentableId" value="Default" />
       <updated>1564409222098</updated>
       <workItem from="1564409224105" duration="11648000" />
-      <workItem from="1564429285639" duration="27223000" />
+      <workItem from="1564429285639" duration="28135000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="38871000" />
+    <option name="totallyTimeSpent" value="39783000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1914" y="23" width="1883" height="1177" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24008691" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -223,15 +222,15 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/FileUtility.java</url>
-          <line>184</line>
+          <line>208</line>
           <properties />
-          <option name="timeStamp" value="52" />
+          <option name="timeStamp" value="57" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/FileUtility.java</url>
-          <line>177</line>
+          <line>202</line>
           <properties />
-          <option name="timeStamp" value="55" />
+          <option name="timeStamp" value="58" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -261,10 +260,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/FileUtility.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="184" selection-start-line="184" selection-end-line="184" />
+        <state relative-caret-position="264">
+          <caret line="173" column="54" selection-start-line="173" selection-start-column="54" selection-end-line="173" selection-end-column="54" />
           <folding>
             <element signature="e#5465#5473#0" expanded="true" />
+            <element signature="e#9111#9119#0" expanded="true" />
           </folding>
         </state>
       </provider>
