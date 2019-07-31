@@ -45,8 +45,9 @@ public class FileUtility {
             params = getParameterValues(params, paramsList.get(i));
             String value  =  paramsList.get(i).replaceAll("':(\\w+)'","'':$1''");
             String valueManipulateDate  =  value.replaceAll("((?<!'):\\w+)","''$1''");
-
-            line += "(id,"+ params +", @report_number,'"+ valueManipulateDate + "', " + params + "),\n";
+            params = removeDuplicateDep(params);
+            
+            line += "(id,"+ params +", @report_number,'"+ valueManipulateDate + "', '" + params + "'),\n";
             params = "";
 
         }
