@@ -43,9 +43,10 @@ public class FileUtility {
         for(int i =0; i < paramsList.size(); i++){
 
             params = getParameterValues(params, paramsList.get(i));
-            String value  =  paramsList.get(i).replaceAll(":(\\w+)","'':$1''");
+            String value  =  paramsList.get(i).replaceAll("':(\\w+)'","'':$1''");
+            String valueManipulateDate  =  value.replaceAll("((?<!'):\\w+)","''$1''");
 
-            line += "(id,"+ params +", @report_number,'"+ value + "', " + params + "),\n";
+            line += "(id,"+ params +", @report_number,'"+ valueManipulateDate + "', " + params + "),\n";
             params = "";
 
         }
@@ -176,7 +177,7 @@ public class FileUtility {
                                     .collect(Collectors.joining(","));
                             k = k + test.toLowerCase();
 
-                            k = removeDuplicateDep(k);
+                            k = removeDuplicateDep(k)+"'";
 
                         }
                     }
@@ -209,13 +210,13 @@ public class FileUtility {
         List<String> l = new ArrayList<String>(findUniqueMap.keySet());
         String removedDuplicates = l.stream().map(Object::toString).collect(Collectors.joining(","));
 
-        return removedDuplicates +"'";
+        return removedDuplicates ;
     }
 
     private static String insertIntoCustomReportJoinBaseTable(String baseTable) {
 
         //replace report number with parameter
-        return "\nINSERT INTO custom_report_join_definitions \n(\n select @report_number, id\n from custom_join_definitions\n where alias in  ('" + baseTable.toLowerCase() + "')\n);\n";
+        return "\nINSERT INTO custom_report_join_definitions \n(\n select @report_number, id\n from custom_join_definitions\n where alias in  ('" + " REPLACE WILL VALUES REQUIRED BY WHERE CLAUSE " + "')\n);\n";
 
     }
 
@@ -225,7 +226,7 @@ public class FileUtility {
                 "VALUES" ;
 
         String params = "";
-
+        String tableParams = "";
         int i = 0;
         String content = "";
         for( JoinModel entry : joinModelArrayList) {
@@ -233,20 +234,61 @@ public class FileUtility {
             if( i == (joinModelArrayList.size() -1)) {
 
                 params = getParameterValues(params, entry.getJoinClause().trim().toLowerCase());
+                tableParams = getParameterValuesForTable(tableParams,entry.getTable().toLowerCase());
+
+                params = getParameter(params, tableParams);
+
+                String value = getTableValue(entry);
+
                 String joinCondition = entry.getJoinClause().trim().toLowerCase().replaceAll("(:\\w+)","''$1''");
 
-                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + entry.getTable().toLowerCase() + "', '" + joinCondition + "', " + params + ");";
+                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + value + "', '" + joinCondition + "', " + params + ");";
                 params = "";
+                tableParams="";
             }else{
+
                 params = getParameterValues(params, entry.getJoinClause().trim().toLowerCase());
+                tableParams = getParameterValuesForTable(tableParams,entry.getTable().toLowerCase());
+
+                params = getParameter(params, tableParams);
+
+                String value = getTableValue(entry);
+
                 String joinCondition = entry.getJoinClause().trim().toLowerCase().replaceAll("(:\\w+)","''$1''");
                 ++i;
-                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + entry.getTable().toLowerCase() + "', '" + joinCondition + "', " + params + "),";
+                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + value + "', '" + joinCondition + "', " + params + "),";
                 params = "";
+                tableParams="";
             }
         }
         content = beginning + content + "\n";
         return content;
+    }
+
+    private static String getTableValue(JoinModel entry) {
+        String doubleQuoteWords = entry.getTable().toLowerCase().replaceAll("((?!'\\s*')'[a-zA-Z\\s_-]*')", "'$1'");
+        String additionalDoubleQuote = doubleQuoteWords.replaceAll("(((?<!\\w)''(?!\\w))|(' '))", "'$1'");
+        String valueTable  =  additionalDoubleQuote.replaceAll("':(\\w+)'","'':$1''");
+        String valueManipulateDate  =  valueTable.replaceAll("((?<!'):\\w+)","''$1''");
+
+        return valueManipulateDate;
+    }
+
+    private static String getParameter(String params, String tableParams) {
+        if (!tableParams.isEmpty() && params.equals("NULL")) {
+            params = tableParams;
+        } else if (!tableParams.isEmpty() && !params.equals("NULL")) {
+            params = tableParams + "," + params.substring(1);
+        }
+        if(!params.equals("NULL")) {
+            params = removeDuplicateDep(params);
+        }
+
+        if(!params.equals("NULL")){
+            params = "'"+ params +"'";
+        }
+
+        return params;
     }
 
     private static String getParameterValues(String params, String entry) {
@@ -263,10 +305,30 @@ public class FileUtility {
         if(params.isEmpty()){
             params = "NULL";
         }else{
-            params = "'" + params.substring(0,params.length()-1) + "'";
+            params =  params.substring(0,params.length()-1);
         }
         return params;
     }
+
+    private static String getParameterValuesForTable(String tableParams, String tableEntry) {
+        Pattern pattern = Pattern.compile(":(\\w+)");
+        Matcher matcher = pattern.matcher(tableEntry);
+
+        while (matcher.find()) {
+            String value = matcher.group().toString();
+            if(!value.isEmpty()) {
+                tableParams += value.substring(1) + ",";
+            }
+        }
+
+        if(tableParams.isEmpty()){
+            tableParams = "";
+        }else{
+            tableParams = tableParams.substring(0,tableParams.length()-1);
+        }
+        return tableParams;
+    }
+
 
 
     public static String insertIntoCustomColumnDefinition(Map<String, String> selectList, String baseTable){
@@ -280,7 +342,6 @@ public class FileUtility {
         for( Map.Entry< String,String> entry : selectList.entrySet()) {
 
             String doubleQuoteWords = entry.getValue().toLowerCase().replaceAll("((?!'\\s*')'[a-zA-Z\\s_-]*')","'$1'");
-
             String additionalDoubleQuote = doubleQuoteWords.replaceAll("(((?<!\\w)''(?!\\w))|(' '))","'$1'");
 
             params = getParameterValues(params, entry.getKey().trim().toLowerCase());

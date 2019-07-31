@@ -67,10 +67,10 @@ public class Query {
 
         String getJoinText        = getFileContent(path, getJoinPattern);
         String replaceCharacter   = getJoinText.replace("`", "\"");
-        String replaceSingleQuote = replaceCharacter.replaceAll("'", "\"");
+        //String replaceSingleQuote = replaceCharacter.replaceAll("'", "\"");
 
 
-        String replaceLeftJoin    = replaceSingleQuote.replaceAll("LEFT JOIN", "LEFT OUTER JOIN");
+        String replaceLeftJoin    = replaceCharacter.replaceAll("LEFT JOIN", "LEFT OUTER JOIN");
         String replaceRightJoin   = replaceLeftJoin.replaceAll("RIGHT JOIN", "RIGHT OUTER JOIN");
         String replaceJoin        = replaceRightJoin.replaceAll("(?<!INNER\\s)(?<!RIGHT OUTER\\s)(?<!LEFT OUTER\\s)JOIN", "INNER JOIN");
         String removeNewLine      = replaceJoin.replaceAll("\\n"," ");
