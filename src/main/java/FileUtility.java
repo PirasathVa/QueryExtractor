@@ -21,7 +21,10 @@ public class FileUtility {
        String customFilters    = insertIntoCustomFilterDefinitions(paramsList);
        String access           = insertAccess();
 
-       System.out.println( report + selects + joins + baseJoin + dependenciesJoin + customFilters + access);
+       String flywayScript     = report + selects + joins + baseJoin + dependenciesJoin + customFilters + access;
+       String pattern          = "(\\b" + baseAlias.toLowerCase() + "\\b)";
+       flywayScript            = flywayScript.replaceAll(pattern,baseTable.toLowerCase());
+       System.out.println( flywayScript );
     }
 
     private static String insertAccess() {
@@ -206,7 +209,7 @@ public class FileUtility {
         List<String> l = new ArrayList<String>(findUniqueMap.keySet());
         String removedDuplicates = l.stream().map(Object::toString).collect(Collectors.joining(","));
 
-        return removedDuplicates;
+        return removedDuplicates +"'";
     }
 
     private static String insertIntoCustomReportJoinBaseTable(String baseTable) {
@@ -230,12 +233,15 @@ public class FileUtility {
             if( i == (joinModelArrayList.size() -1)) {
 
                 params = getParameterValues(params, entry.getJoinClause().trim().toLowerCase());
-                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + entry.getTable().toLowerCase() + "', '" + entry.getJoinClause().trim().toLowerCase() + "', " + params + ");";
+                String joinCondition = entry.getJoinClause().trim().toLowerCase().replaceAll("(:\\w+)","''$1''");
+
+                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + entry.getTable().toLowerCase() + "', '" + joinCondition + "', " + params + ");";
                 params = "";
             }else{
                 params = getParameterValues(params, entry.getJoinClause().trim().toLowerCase());
+                String joinCondition = entry.getJoinClause().trim().toLowerCase().replaceAll("(:\\w+)","''$1''");
                 ++i;
-                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + entry.getTable().toLowerCase() + "', '" + entry.getJoinClause().trim().toLowerCase() + "', " + params + "),";
+                content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + entry.getTable().toLowerCase() + "', '" + joinCondition + "', " + params + "),";
                 params = "";
             }
         }
