@@ -346,7 +346,11 @@ public class FileUtility {
             String doubleQuoteWords = entry.getValue().toLowerCase().replaceAll("((?!'\\s*')'[a-zA-Z\\s_-]*')","'$1'");
             String additionalDoubleQuote = doubleQuoteWords.replaceAll("(((?<!\\w)''(?!\\w))|(' '))","'$1'");
 
-            params = getParameterValues(params, entry.getKey().trim().toLowerCase());
+            params = getParameterValues(params, entry.getValue().trim().toLowerCase());
+
+            if(!params.equals("NULL")){
+                params = "'" + params + "'";
+            }
 
             if(!entry.getKey().equals(baseTable)) {
                     content += "\n( '" + entry.getKey().trim().replaceAll("\\s", "_").toLowerCase() + "' , " + "@report_number" + " , '" + additionalDoubleQuote + "' , '" + "GROUP_NAME" + "' , '" + entry.getKey().trim().toLowerCase() + "' , " + ++i + ", NULL, " + params +  ", 'STRING'),";
