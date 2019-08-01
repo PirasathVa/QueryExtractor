@@ -24,7 +24,7 @@ public class FileUtility {
        String flywayScript     = report + selects + joins + baseJoin + dependenciesJoin + customFilters + access;
        String pattern          = "(\\b" + baseAlias.toLowerCase() + "\\b)";
        flywayScript            = flywayScript.replaceAll(pattern,baseTable.toLowerCase());
-       System.out.println( flywayScript );
+       System.out.println( flywayScript  + " \nSET @report_number = NULL\n");
     }
 
     private static String insertAccess() {
