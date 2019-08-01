@@ -277,7 +277,7 @@ public class FileUtility {
     private static String getTableValue(JoinModel entry) {
         String doubleQuoteWords = entry.getTable().toLowerCase().replaceAll("((?!'\\s*')'[a-zA-Z\\s_-]*')", "'$1'");
         String additionalDoubleQuote = doubleQuoteWords.replaceAll("(((?<!\\w)''(?!\\w))|(' '))", "'$1'");
-        String valueTable  =  additionalDoubleQuote.replaceAll("(':\\w+')","'':$1''");
+        String valueTable  =  additionalDoubleQuote.replaceAll("(':\\w+')","'$1'");
 
         return valueTable;
     }
