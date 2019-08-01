@@ -47,7 +47,7 @@ public class FileUtility {
             String valueManipulateDate  =  value.replaceAll("((?<!'):\\w+)","''$1''");
             params = removeDuplicateDep(params);
             
-            line += "(id,"+ params +", @report_number,'"+ valueManipulateDate + "', '" + params + "'),\n";
+            line += "(id,'"+ params +"', @report_number,'"+ valueManipulateDate + "', '" + params + "'),\n";
             params = "";
 
         }
@@ -79,16 +79,17 @@ public class FileUtility {
             filter = filter.substring(0,filter.length()-5);
         }
 
+        String filterQuoted  =  filter.toLowerCase().replaceAll("((?!'\\s*')'[a-zA-Z\\s_-]*')","'$1'");
+
         String insertReport =
                 "\nSELECT @report_number := id from custom_report_definitions where name = '"+ reportName + "';\n" +
                 "\nINSERT INTO custom_report_definitions (`id`, `name`, `database`, `base_table`, `filter`) \n" +
-                "SELECT * FROM ((SELECT ((select max(id) from custom_report_definitions)+1),'" + reportName + "','appdirect','" + baseTable.toLowerCase() + "','" + filter.toLowerCase() + "')) AS tmp\n" +
+                "SELECT * FROM ((SELECT ((select max(id) from custom_report_definitions)+1),'" + reportName + "','appdirect','" + baseTable.toLowerCase() + "','" + filterQuoted + "')) AS tmp\n" +
                 "WHERE not exists(\n" +
                 "   (Select * from custom_report_definitions where id =  @report_number)\n" +
                 ");\n" +
                 "\nSELECT @report_number := id from custom_report_definitions where name = '"+ reportName + "';\n";
 
-        insertReport  =  insertReport.replaceAll("((?!'\\s*')'[a-zA-Z\\s_-]*')","'$1'");
 
 
         return insertReport;
