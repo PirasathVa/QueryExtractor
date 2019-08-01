@@ -1,3 +1,5 @@
+import com.sun.tools.javac.util.StringUtils;
+
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.MatchResult;
@@ -114,7 +116,7 @@ public class FileUtility {
 
 
             List<String> l = new ArrayList<String>(matches.keySet());
-            name = l.stream().map(Object::toString).collect(Collectors.joining(","));
+            name = l.stream().map(Object::toString).filter(s -> s != null && !s.isEmpty()).collect(Collectors.joining(","));
 
             if(selectDependencies.containsKey(name)){
                 String value = selectDependencies.get(name);
@@ -157,37 +159,43 @@ public class FileUtility {
                 if (dependenciesMap.containsKey(x)) {
                     String dep = dependenciesMap.get(x).getJoinDependencies().stream().map(Object::toString).collect(Collectors.joining(","));
                     if (dep.isEmpty()) {
-                        k = entry.getKey();
+                        k = entry.getKey() ;
                     } else {
-                        k = dep;
+                        k = dep ;
                     }
                 }
 
                 String[] appendReportNumber = k.split(",");
-                k = "";
-                for (int i = 0; i < appendReportNumber.length; i++) {
-                    if (!appendReportNumber[i].isEmpty()) {
-                        k += "'" + appendReportNumber[i] + "',";
-                    }
-
-                    if (i == (appendReportNumber.length - 1)) {
-                        if (!k.contains(entry.getKey()) && !entry.getKey().equals(baseTable)) {
+                //k = "";
+                if(!appendReportNumber[0].equals("")) {
+                    for (int i = 0; i < appendReportNumber.length; i++) {
+                        if (!appendReportNumber[i].isEmpty()) {
+                            k += "," +  appendReportNumber[i] ;
                             String test =
-                                    Stream.of(entry.getKey().split(","))
-                                    .map(s -> "'" + s + "'")
-                                    .collect(Collectors.joining(","));
-                            k = k + test.toLowerCase();
+                                    Stream.of(k.split(","))
+                                            .collect(Collectors.joining(","));
+                            k = removeDuplicateDep(test);
+                        }
 
-                            k = removeDuplicateDep(k)+"'";
+                        if (i == (appendReportNumber.length - 1)) {
+                            if (!k.contains(entry.getKey()) && !entry.getKey().equals(baseTable)) {
+                                String test =
+                                        Stream.of(entry.getKey().split(","))
+                                                .collect(Collectors.joining(","));
+                                k += "," + test.toLowerCase();
 
+                                k = removeDuplicateDep(k);
+
+                            }
                         }
                     }
                 }
+
             }
 
             if(!k.isEmpty()){
 
-            k = k.substring(0,k.length()-1);
+                k = Stream.of(k.split(",")).map(s -> "'" + s + "'").collect(Collectors.joining(","));
 
                 beginning += "\nINSERT INTO custom_column_join_definitions \n(\nselect\n  ccd.id, cjd.id\nfrom\n  custom_join_definitions cjd, custom_column_definitions ccd\nwhere\n  ccd.custom_report_definition_id = @report_number\n  " +
                         "and ccd.name in (" + v.toLowerCase() + ") " +
