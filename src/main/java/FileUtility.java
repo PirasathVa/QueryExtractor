@@ -88,8 +88,8 @@ public class FileUtility {
                 ");\n" +
                 "\nSELECT @report_number := id from custom_report_definitions where name = '"+ reportName + "';\n";
 
-//        String beginning = "\nINSERT INTO custom_report_definitions (id, name, `database`, base_table, filter) \nVALUES (" +
-//                "@report_number, 'report_name', 'appdirect', '"+ baseAlias.toLowerCase() +"','"+ noGroupBy.toLowerCase() +"');\n";
+        insertReport  =  insertReport.replaceAll("((?!'\\s*')'[a-zA-Z\\s_-]*')","'$1'");
+
 
         return insertReport;
 
