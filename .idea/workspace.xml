@@ -29,20 +29,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/FileUtility.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="26" column="47" lean-forward="true" selection-start-line="26" selection-start-column="47" selection-end-line="26" selection-end-column="47" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/JoinModel.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="47" selection-start-line="47" selection-end-line="47" />
-              <folding>
-                <element signature="e#1058#1059#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="215">
+              <caret line="272" selection-start-line="272" selection-end-line="272" />
             </state>
           </provider>
         </entry>
@@ -59,6 +47,7 @@
       <find>duplica</find>
       <find>removeDuplicateDep</find>
       <find>getParameterValues</find>
+      <find>custom_join_definitions</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -89,7 +78,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-1805" />
-    <option name="y" value="81" />
+    <option name="y" value="56" />
     <option name="width" value="1805" />
     <option name="height" value="1027" />
   </component>
@@ -184,15 +173,15 @@
       <updated>1564409222098</updated>
       <workItem from="1564409224105" duration="11648000" />
       <workItem from="1564429285639" duration="46625000" />
-      <workItem from="1564666499171" duration="4841000" />
+      <workItem from="1564666499171" duration="7474000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="63114000" />
+    <option name="totallyTimeSpent" value="65747000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1805" y="81" width="1805" height="1027" extended-state="0" />
+    <frame x="-1805" y="56" width="1805" height="1027" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.2535451" />
@@ -204,8 +193,8 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.49197862" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.40748662" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.49197862" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.40748662" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -234,15 +223,27 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/FileUtility.java</url>
-          <line>348</line>
+          <line>48</line>
           <properties />
-          <option name="timeStamp" value="88" />
+          <option name="timeStamp" value="92" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/FileUtility.java</url>
+          <line>245</line>
+          <properties />
+          <option name="timeStamp" value="102" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/FileUtility.java</url>
+          <line>273</line>
+          <properties />
+          <option name="timeStamp" value="105" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
-        <watch expression="entry" />
+        <watch expression="entry.alias" />
       </configuration>
     </watches-manager>
   </component>
@@ -273,8 +274,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/FileUtility.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="26" column="47" lean-forward="true" selection-start-line="26" selection-start-column="47" selection-end-line="26" selection-end-column="47" />
+        <state relative-caret-position="215">
+          <caret line="272" selection-start-line="272" selection-end-line="272" />
         </state>
       </provider>
     </entry>

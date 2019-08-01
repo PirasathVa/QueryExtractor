@@ -43,11 +43,10 @@ public class FileUtility {
         for(int i =0; i < paramsList.size(); i++){
 
             params = getParameterValues(params, paramsList.get(i));
-            String value  =  paramsList.get(i).replaceAll("':(\\w+)'","'':$1''");
-            String valueManipulateDate  =  value.replaceAll("((?<!'):\\w+)","''$1''");
+            String value  =  paramsList.get(i).replaceAll("'(:\\w+)'","''$1''");
             params = removeDuplicateDep(params);
             
-            line += "(id,'"+ params +"', @report_number,'"+ valueManipulateDate + "', '" + params + "'),\n";
+            line += "(id,'"+ params +"', @report_number,'"+ value + "', '" + params + "'),\n";
             params = "";
 
         }
@@ -242,7 +241,7 @@ public class FileUtility {
 
                 String value = getTableValue(entry);
 
-                String joinCondition = entry.getJoinClause().trim().toLowerCase().replaceAll("(:\\w+)","''$1''");
+                String joinCondition = entry.getJoinClause().trim().toLowerCase().replaceAll("(':\\w+')","''$1''");
 
                 content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + value + "', '" + joinCondition + "', " + params + ");";
                 params = "";
@@ -256,7 +255,7 @@ public class FileUtility {
 
                 String value = getTableValue(entry);
 
-                String joinCondition = entry.getJoinClause().trim().toLowerCase().replaceAll("(:\\w+)","''$1''");
+                String joinCondition = entry.getJoinClause().trim().toLowerCase().replaceAll("(':\\w+')","''$1''");
                 ++i;
                 content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + value + "', '" + joinCondition + "', " + params + "),";
                 params = "";
@@ -270,10 +269,9 @@ public class FileUtility {
     private static String getTableValue(JoinModel entry) {
         String doubleQuoteWords = entry.getTable().toLowerCase().replaceAll("((?!'\\s*')'[a-zA-Z\\s_-]*')", "'$1'");
         String additionalDoubleQuote = doubleQuoteWords.replaceAll("(((?<!\\w)''(?!\\w))|(' '))", "'$1'");
-        String valueTable  =  additionalDoubleQuote.replaceAll("':(\\w+)'","'':$1''");
-        String valueManipulateDate  =  valueTable.replaceAll("((?<!'):\\w+)","''$1''");
+        String valueTable  =  additionalDoubleQuote.replaceAll("(':\\w+')","'':$1''");
 
-        return valueManipulateDate;
+        return valueTable;
     }
 
     private static String getParameter(String params, String tableParams) {
