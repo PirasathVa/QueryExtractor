@@ -246,10 +246,12 @@ public class FileUtility {
                 tableParams = getParameterValuesForTable(tableParams,entry.getTable().toLowerCase());
 
                 params = getParameter(params, tableParams);
-
                 String value = getTableValue(entry);
 
-                String joinCondition = entry.getJoinClause().trim().toLowerCase().replaceAll("(':\\w+')","''$1''");
+                String doubleQuoteWords = entry.getJoinClause().trim().toLowerCase().replaceAll("((?!'\\s*')'[a-zA-Z\\s_-]*')","'$1'");
+                String additionalDoubleQuote = doubleQuoteWords.replaceAll("(((?<!\\w)''(?!\\w))|(' '))","'$1'");
+
+                String joinCondition = additionalDoubleQuote.replaceAll("'(:\\w+)'","''$1''");
 
                 content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + value + "', '" + joinCondition + "', " + params + ");";
                 params = "";
@@ -260,11 +262,16 @@ public class FileUtility {
                 tableParams = getParameterValuesForTable(tableParams,entry.getTable().toLowerCase());
 
                 params = getParameter(params, tableParams);
-
                 String value = getTableValue(entry);
 
-                String joinCondition = entry.getJoinClause().trim().toLowerCase().replaceAll("(':\\w+')","''$1''");
+                String doubleQuoteWords = entry.getJoinClause().trim().toLowerCase().replaceAll("((?!'\\s*')'[a-zA-Z\\s_-]*')","'$1'");
+                String additionalDoubleQuote = doubleQuoteWords.replaceAll("(((?<!\\w)''(?!\\w))|(' '))","'$1'");
+
+                String joinCondition = additionalDoubleQuote.replaceAll("'(:\\w+)'","''$1''");
+
+
                 ++i;
+
                 content += "\n( '" + entry.getJoinType() + "', '"+ entry.getAlias().toLowerCase() + "', '" + value + "', '" + joinCondition + "', " + params + "),";
                 params = "";
                 tableParams="";
@@ -293,7 +300,7 @@ public class FileUtility {
         }
 
         if(!params.equals("NULL")){
-            params = "'"+ params +"'";
+            params =  "'" + params + "'";
         }
 
         return params;

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f369cd70-d1bb-4c98-9f14-0b56c40f5d4e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/FileUtility.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/FileUtility.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -20,7 +21,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Query.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="331">
+            <state relative-caret-position="780">
               <caret line="57" selection-start-line="57" selection-end-line="57" />
             </state>
           </provider>
@@ -29,8 +30,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/FileUtility.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="158">
-              <caret line="279" column="80" selection-start-line="279" selection-start-column="80" selection-end-line="279" selection-end-column="80" />
+            <state relative-caret-position="177">
+              <caret line="255" column="139" selection-start-line="255" selection-start-column="139" selection-end-line="255" selection-end-column="139" />
             </state>
           </provider>
         </entry>
@@ -78,8 +79,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1805" />
-    <option name="y" value="56" />
+    <option name="x" value="-1811" />
+    <option name="y" value="50" />
     <option name="width" value="1805" />
     <option name="height" value="1027" />
   </component>
@@ -174,15 +175,16 @@
       <updated>1564409222098</updated>
       <workItem from="1564409224105" duration="11648000" />
       <workItem from="1564429285639" duration="46625000" />
-      <workItem from="1564666499171" duration="14237000" />
+      <workItem from="1564666499171" duration="15373000" />
+      <workItem from="1564756315199" duration="3989000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="72510000" />
+    <option name="totallyTimeSpent" value="77635000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1805" y="56" width="1805" height="1027" extended-state="0" />
+    <frame x="-1811" y="50" width="1805" height="1027" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.2535451" />
@@ -194,7 +196,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.49197862" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.33262032" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.40748662" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -248,13 +250,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Query.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="57" selection-start-line="57" selection-end-line="57" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/src.zip!/java/util/function/Function.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
@@ -262,10 +257,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Query.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="57" selection-start-line="57" selection-end-line="57" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/FileUtility.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="279" column="80" selection-start-line="279" selection-start-column="80" selection-end-line="279" selection-end-column="80" />
+        <state relative-caret-position="177">
+          <caret line="255" column="139" selection-start-line="255" selection-start-column="139" selection-end-line="255" selection-end-column="139" />
         </state>
       </provider>
     </entry>
